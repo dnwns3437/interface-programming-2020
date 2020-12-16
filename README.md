@@ -2,13 +2,6 @@
 
 ## Team Project (Due by 12/22)
 
-- 1조 김효림, 이우림, 김해린  
-- 2조 서희원, 박수빈, 오효민, 송병찬, 김혜선  
-- 3조 고민정, 박우준, 김시연  
-- 4조 구민성, 차성호, 박지하, 김현호 
-- 5조 김민기, 이규원, 최유림, 김민지 
-- 6조 윤아람, 황보준호, 김수빈    
-
 [Unsplash API](https://unsplash.com/developers)를 사용하여 다음의 요구사항을 충족하는 앱을 만드세요. 화면은 [Unsplash iOS 앱](https://apps.apple.com/kr/app/unsplash/id1290631746)을 참고해주세요.
 
 [https://unsplash.com/developers](https://unsplash.com/developers)
