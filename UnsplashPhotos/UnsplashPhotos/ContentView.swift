@@ -10,7 +10,21 @@ import SwiftUI
 struct ContentView: View {
     @State var search = "" // Query
     @State var page = 1
-    @State private var photos: [[Photo]] = []
+    @State private var photos: [Photo] = []
+    @State private var showLikedOnly = false
+    private var columns : [GridItem] = [
+        GridItem(spacing:4),
+        GridItem(spacing:4)
+    ]
+    
+//    var filteredPhotos: [[Photo]] {
+//            photos.filter { i in
+//                ForEach(i) { photo in
+//                 (!showLikedOnly || photo.liked_by_user)
+//                }
+//            }
+//        } 일단 무시
+    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -46,22 +60,37 @@ struct ContentView: View {
         
             Spacer(minLength: 15)
                         
-            // Photo List
+            // Photo List(normal)
             ScrollView {
-                LazyVStack(spacing: 15) {
-                    // Show two photos for each row
-                    ForEach(photos, id: \.self) { i in
-                        HStack(spacing: 20) {
-                            ForEach(i) { j in
-                                Image(systemName: "photos")
-                                    .data(url: URL(string: j.urls["thumb"]!)!)
-                                    .frame(width: (UIScreen.main.bounds.width - 50) / 2, height: 200)
-                                    .cornerRadius(10)
-                            }
+                
+                
+                LazyVGrid(columns: columns){
+                    ForEach(photos, id:\.self) {photo in
+                        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .bottom))
+                        {
+                        Image(systemName: "photos")
+                            .data(url: URL(string: photo.urls["thumb"]!)!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: (UIScreen.main.bounds.width - 10) / 2, height: 200)
+                            .cornerRadius(5)
+
+                                    if (photo.liked_by_user) {
+                                        Image(systemName: "heart.fill")
+                                            .foregroundColor(.pink)
+                                    }
+                                    else {
+                                        Image(systemName: "heart")
+                                            .foregroundColor(.pink)
+                                    }
                         }
+                        
                     }
                 }
-            }
+
+            } //photolist(normal)
+            
+            
             
             Spacer()
         }
@@ -91,15 +120,10 @@ struct ContentView: View {
                 return
             }
             
-            for i in stride(from: 0, to: response.results.count, by: 2){
-                var ArrayData : [Photo] = []
-                for j in i..<i+2 {
-                    if j < response.results.count{
-                        ArrayData.append(response.results[j])
-                    }
-                }
+            for i in 0..<response.results.count {
+
                 DispatchQueue.main.async {
-                    self.photos.append(ArrayData)
+                    self.photos.append(response.results[i])
                 }
             }
         }.resume()
