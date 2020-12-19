@@ -5,6 +5,9 @@
 //  Created by Woojun Park on 2020/12/18.
 //
 
+//이 상태에서 튜토리얼 보고 나머지 하자! + 한페이지에 보이는 사진 수 늘리기(url만 변경)
+//민정 언니가 만들면 상세 페이지에서 liked변경할 수 있게 하기!
+
 import SwiftUI
 
 struct ContentView: View {
