@@ -16,6 +16,7 @@
 		30539238258BC9A80015B761 /* MediaResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30539237258BC9A80015B761 /* MediaResponse.swift */; };
 		3053923E258BCB630015B761 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053923D258BCB630015B761 /* Image.swift */; };
 		FE46CAA3258D259200028CD4 /* LikedPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE46CAA2258D259200028CD4 /* LikedPhotoView.swift */; };
+		FE7B4814258D41FE003FFF4A /* DetailedPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7B4813258D41FE003FFF4A /* DetailedPhotoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		30539237258BC9A80015B761 /* MediaResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaResponse.swift; sourceTree = "<group>"; };
 		3053923D258BCB630015B761 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		FE46CAA2258D259200028CD4 /* LikedPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedPhotoView.swift; sourceTree = "<group>"; };
+		FE7B4813258D41FE003FFF4A /* DetailedPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPhotoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				3053923C258BCB550015B761 /* Extensions */,
 				30539201258BC9580015B761 /* UnsplashPhotosApp.swift */,
 				30539203258BC9580015B761 /* ContentView.swift */,
+				FE7B4813258D41FE003FFF4A /* DetailedPhotoView.swift */,
 				FE46CAA2258D259200028CD4 /* LikedPhotoView.swift */,
 				30539205258BC9590015B761 /* Assets.xcassets */,
 				3053920A258BC9590015B761 /* Info.plist */,
@@ -277,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				30539238258BC9A80015B761 /* MediaResponse.swift in Sources */,
+				FE7B4814258D41FE003FFF4A /* DetailedPhotoView.swift in Sources */,
 				3053923E258BCB630015B761 /* Image.swift in Sources */,
 				30539204258BC9580015B761 /* ContentView.swift in Sources */,
 				30539202258BC9580015B761 /* UnsplashPhotosApp.swift in Sources */,

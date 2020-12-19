@@ -27,6 +27,8 @@ struct ContentView: View {
     
     
     var body: some View {
+        NavigationView{
+            
         VStack(spacing: 0) {
             // Search Bar
             HStack {
@@ -59,32 +61,35 @@ struct ContentView: View {
             .background(Color.white)
         
             Spacer(minLength: 15)
-                        
             // Photo List(normal)
+            
             ScrollView {
-                
                 
                 LazyVGrid(columns: columns){
                     ForEach(photos, id:\.self) {photo in
+                        
                         ZStack(alignment: Alignment(horizontal: .trailing, vertical: .bottom))
                         {
+                     
+                        NavigationLink(  //detailed view when clicked
+                            destination: DetailedPhotoView(imageCode: URL(string: photo.urls["raw"]!)!, location: self.search)){
                         Image(systemName: "photos")
                             .data(url: URL(string: photo.urls["thumb"]!)!)
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
                             .frame(width: (UIScreen.main.bounds.width - 10) / 2, height: 200)
-                            .cornerRadius(5)
-
-                                    if (photo.liked_by_user) {
-                                        Image(systemName: "heart.fill")
-                                            .foregroundColor(.pink)
-                                    }
-                                    else {
-                                        Image(systemName: "heart")
-                                            .foregroundColor(.pink)
-                                    }
-                        }
-                        
+                            .cornerRadius(5)}
+                            
+                            
+//                                    if (photo.liked_by_user) {
+//                                        Image(systemName: "heart.fill")
+//                                            .foregroundColor(.pink)
+//                                    }
+//                                    else {
+//                                        Image(systemName: "heart")
+//                                            .foregroundColor(.pink)
+//                                    }
+                            
+                       }
                     }
                 }
 
@@ -92,11 +97,13 @@ struct ContentView: View {
             
             
             
-            Spacer()
+                Spacer()
+            }
+            .background(Color.black.opacity(0.07).edgesIgnoringSafeArea(.all))
+            .edgesIgnoringSafeArea(.top)
+            
+        }.navigationBarTitle("Where do you want to go?", displayMode: .inline)
         }
-        .background(Color.black.opacity(0.07).edgesIgnoringSafeArea(.all))
-        .edgesIgnoringSafeArea(.top)
-        
     }
     
     func fetchPhoto() {
