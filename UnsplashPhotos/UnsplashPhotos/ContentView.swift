@@ -77,9 +77,9 @@ struct ContentView: View {
                             .data(url: URL(string: photo.urls["thumb"]!)!)
                             .resizable()
                             .frame(width: (UIScreen.main.bounds.width - 10) / 2, height: 200)
-                            .cornerRadius(5)}
+                            .cornerRadius(5)
                             
-                            
+                            //이상하게 navigatioin link 걸면 위치가 어긋나길래 주석처리해뒀어요
 //                                    if (photo.liked_by_user) {
 //                                        Image(systemName: "heart.fill")
 //                                            .foregroundColor(.pink)

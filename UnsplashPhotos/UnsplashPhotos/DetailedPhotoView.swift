@@ -38,19 +38,7 @@ struct DetailedPhotoView: View {
                 }.padding(.trailing, 10)
                 
                 Text("Download")
-                Button (action: {
-                    
-                    // saving Image...
-                    
-                    // Image Quality...
-                    SDWebImageDownloader().downloadImage(with: URL(string: j.urls["small"]!)) { (image, _, _, _) in
-                        
-                        // For this we need permission...
-                        
-                        UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
-                    }
-                    
-                })
+                Button(action: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/{}/*@END_MENU_TOKEN@*/) {
                     Image(systemName: "arrow.down")
                         .renderingMode(.original)
                 }.padding(.trailing, 18)
