@@ -13,23 +13,32 @@ import SwiftUI
 struct ContentView: View {
     @State var search = "" // Query
     @State var page = 1
-    @State private var photos: [Photo] = []
+    @State var photos: [Photo] = []
     @State private var showLikedOnly = false
-    private var columns : [GridItem] = [
-        GridItem(spacing:4),
-        GridItem(spacing:4)
-    ]
+    @State var likedbyuser = [Bool](repeating: false, count: 10)
+
+//    @State private var columns : [GridItem] = [
+//        GridItem(spacing:4),
+//        GridItem(spacing:4)
+//    ]
     
-//    var filteredPhotos: [[Photo]] {
-//            photos.filter { i in
-//                ForEach(i) { photo in
-//                 (!showLikedOnly || photo.liked_by_user)
-//                }
-//            }
-//        } 일단 무시
+    var filteredPhotos: [Photo] {
+            photos.filter {photo in
+                 (!showLikedOnly || likedbyuser[photos.firstIndex {$0 == photo}!])
+                }
+        }
     
+
+    
+//    var filteredLandmarks: [Landmark] {
+//        landmarks.filter { landmark in
+//            (!showFavoritesOnly || landmark.isFavorite)
+//        }
+//    }
     
     var body: some View {
+        NavigationView{
+            
         VStack(spacing: 0) {
             // Search Bar
             HStack {
@@ -62,45 +71,70 @@ struct ContentView: View {
             .background(Color.white)
         
             Spacer(minLength: 15)
-                        
+            
+//            var body: some View {
+//                    NavigationView {
+//                        List {
+//                            Toggle(isOn: $showLikedOnly) {
+//                                Text("Your own travel")
+//                            }
+//
+//                            ForEach(filteredPhotos) { photo in
+//                                NavigationLink{
+//                                    LandmarkRow(landmark: landmark)
+//                                }
+//                            }
+//                        }
+//                        .navigationTitle("Landmarks")
+//                    }
+//                }
+            
+            
+            PhotoListView(photos: photos)
             // Photo List(normal)
-            ScrollView {
-                
-                
-                LazyVGrid(columns: columns){
-                    ForEach(photos, id:\.self) {photo in
-                        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .bottom))
-                        {
-                        Image(systemName: "photos")
-                            .data(url: URL(string: photo.urls["thumb"]!)!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: (UIScreen.main.bounds.width - 10) / 2, height: 200)
-                            .cornerRadius(5)
-
-                                    if (photo.liked_by_user) {
-                                        Image(systemName: "heart.fill")
-                                            .foregroundColor(.pink)
-                                    }
-                                    else {
-                                        Image(systemName: "heart")
-                                            .foregroundColor(.pink)
-                                    }
-                        }
-                        
-                    }
-                }
-
-            } //photolist(normal)
+            
+//            ScrollView {
+//                
+//                LazyVGrid(columns: columns){
+//                    ForEach(photos, id:\.self) {photo in
+//                        
+//                        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .bottom))
+//                        {
+//                     
+//                        NavigationLink(  //detailed view when clicked
+//                            destination: DetailedPhotoView(imageCode: URL(string: photo.urls["raw"]!)!, location: self.search, photos: $photos, likedbyuser: $likedbyuser, curr: photos.firstIndex {$0 == photo}!)){
+//                        Image(systemName: "photos")
+//                            .data(url: URL(string: photo.urls["thumb"]!)!)
+//                            .resizable()
+//                            .frame(width: (UIScreen.main.bounds.width - 10) / 2, height: 200)
+//                            .cornerRadius(5) }
+//                            
+//                            //이상하게 navigatioin link 걸면 위치가 어긋나길래 주석처리해뒀어요
+//                            if (likedbyuser[photos.firstIndex {$0 == photo}!]) {
+//                                        Image(systemName: "heart.fill")
+//                                            .foregroundColor(.pink)
+//                                    }
+//                                    else {
+//                                        Image(systemName: "heart")
+//                                            .foregroundColor(.pink)
+//                                    }
+//                            
+//                       
+//                    }
+//                }
+//
+//            } //photolist(normal)
             
             
             
-            Spacer()
+                Spacer()
+            }
+            .background(Color.black.opacity(0.07).edgesIgnoringSafeArea(.all))
+            .edgesIgnoringSafeArea(.top)
+            
+        }.navigationBarTitle("Where do you want to go?", displayMode: .inline)
         }
-        .background(Color.black.opacity(0.07).edgesIgnoringSafeArea(.all))
-        .edgesIgnoringSafeArea(.top)
-        
-    }
+    
     
     func fetchPhoto() {
         let key = "xMTW2-DMELMK-DOsDuQcoeeAV_TBlRenbpumI70Ive4"
@@ -120,6 +154,7 @@ struct ContentView: View {
             let decoder = JSONDecoder()
         
             guard let response = try? decoder.decode(MediaResponse.self, from: data) else {
+                print("not")
                 return
             }
             
@@ -131,6 +166,7 @@ struct ContentView: View {
             }
         }.resume()
     }
+
 }
 
 //struct ContentView_Previews: PreviewProvider {

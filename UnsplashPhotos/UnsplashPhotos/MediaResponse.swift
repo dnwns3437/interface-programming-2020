@@ -15,5 +15,4 @@ struct Photo: Codable, Identifiable, Hashable {
     let id: String
     let urls: [String : String]
     var liked_by_user: Bool 
-
 }
