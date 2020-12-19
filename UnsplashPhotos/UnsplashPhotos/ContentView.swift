@@ -10,8 +10,10 @@ import SwiftUI
 struct ContentView: View {
     @State var search = "" // Query
     @State var page = 1
-    @State private var photos: [Photo] = []
+    @State var photos: [Photo] = []
     @State private var showLikedOnly = false
+    @State var likedbyuser = [Bool](repeating: false, count: 10)
+
     private var columns : [GridItem] = [
         GridItem(spacing:4),
         GridItem(spacing:4)
@@ -72,7 +74,7 @@ struct ContentView: View {
                         {
                      
                         NavigationLink(  //detailed view when clicked
-                            destination: DetailedPhotoView(imageCode: URL(string: photo.urls["raw"]!)!, location: self.search)){
+                            destination: DetailedPhotoView(imageCode: URL(string: photo.urls["raw"]!)!, location: self.search, photos: $photos, likedbyuser: $likedbyuser, curr: photos.firstIndex {$0 == photo}!)){
                         Image(systemName: "photos")
                             .data(url: URL(string: photo.urls["thumb"]!)!)
                             .resizable()
@@ -124,6 +126,7 @@ struct ContentView: View {
             let decoder = JSONDecoder()
         
             guard let response = try? decoder.decode(MediaResponse.self, from: data) else {
+                print("not")
                 return
             }
             
