@@ -8,18 +8,23 @@
 import SwiftUI
 
 struct DetailedPhotoView: View {
-    var imageCode: URL
-    var location = ""
+    @Binding var photos: [Photo]
+    @Binding var likedByUser: [Bool]
+    @Binding var likedPhotos: [Photo]
+    @Binding var showLikedOnly: Bool
+
     @State var isUserSwiping: Bool = false
     @State var offset: CGFloat = 0
-    @Binding var photos: [Photo]
-    @Binding var likedbyuser: [Bool]
     @State var curr: Int = 0
+    var location: String
+
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         
         VStack(){
+            
             GeometryReader { geometry in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(alignment: .center, spacing: 1) {
@@ -66,8 +71,11 @@ struct DetailedPhotoView: View {
                 Spacer(minLength:0)
                 
                 Text("Like")
-                Button(action: {likedbyuser[curr].toggle()}) {
-                    if (likedbyuser[curr]){
+                Button(action: {
+                    likedByUser[curr].toggle()
+                    setLiked()
+                }) {
+                    if (likedByUser[curr]){
                         Image(systemName: "heart.fill")
                             .foregroundColor(.red)
                     }
@@ -87,9 +95,34 @@ struct DetailedPhotoView: View {
             
         Spacer()
             
-        }.navigationBarTitle(location, displayMode: .inline)
-     
+        }.navigationBarTitle(showLikedOnly ? "Liked" : location, displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading:
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                    curr = 0
+                    
+                }) {
+                    Text("Back")
+                    
+                })
         
+    }
+    
+    func setLiked() {
+        for i in 0..<photos.count {
+            if likedByUser[i], !likedPhotos.contains(photos[i]) {
+                likedPhotos.append(photos[i])
+                break
+            }
+            else if !likedByUser[i], likedPhotos.contains(photos[i]) {
+                likedPhotos.remove(at: likedPhotos.firstIndex {$0 == photos[i]}!)
+                if showLikedOnly, i < photos.count - 1 {
+                    likedByUser.remove(at: likedPhotos.firstIndex {$0 == photos[i]}!)
+                }
+                break
+            }
+        }
     }
 }
 

@@ -5,136 +5,83 @@
 //  Created by Woojun Park on 2020/12/18.
 //
 
-//이 상태에서 튜토리얼 보고 나머지 하자! + 한페이지에 보이는 사진 수 늘리기(url만 변경)
-//민정 언니가 만들면 상세 페이지에서 liked변경할 수 있게 하기!
-
 import SwiftUI
 
 struct ContentView: View {
     @State var search = "" // Query
     @State var page = 1
     @State var photos: [Photo] = []
-    @State private var showLikedOnly = false
-    @State var likedbyuser = [Bool](repeating: false, count: 10)
-
-//    @State private var columns : [GridItem] = [
-//        GridItem(spacing:4),
-//        GridItem(spacing:4)
-//    ]
+    @State var showLikedOnly = false
+    @State var likedByUser = [Bool](repeating: false, count: 10)
+    @State var likedPhotos: [Photo] = []
     
-    var filteredPhotos: [Photo] {
-            photos.filter {photo in
-                 (!showLikedOnly || likedbyuser[photos.firstIndex {$0 == photo}!])
-                }
-        }
+    private var columns : [GridItem] = [
+        GridItem(spacing:4),
+        GridItem(spacing:4)
+    ]
     
-
+//    var filteredPhotos: [[Photo]] {
+//            photos.filter { i in
+//                ForEach(i) { photo in
+//                 (!showLikedOnly || photo.liked_by_user)
+//                }
+//            }
+//        } 일단 무시
     
-//    var filteredLandmarks: [Landmark] {
-//        landmarks.filter { landmark in
-//            (!showFavoritesOnly || landmark.isFavorite)
-//        }
-//    }
     
     var body: some View {
-        NavigationView{
+        NavigationView {
             
-        VStack(spacing: 0) {
-            // Search Bar
-            HStack {
-                Spacer(minLength: 0)
+            VStack(spacing: 0) {
                 
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-        
-                TextField("Search...", text: self.$search)
-                
-                Button(action: {
-                    self.search = ""
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 13))
+                // Search Bar
+                HStack {
+                    Spacer(minLength: 0)
+                     
+                    Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
+            
+                    TextField("Search...", text: self.$search)
+                    
+                    Button(action: {
+                        self.search = ""
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 13))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.leading,10)
+                    
+                    Button("Find") {
+                        likedByUser = [Bool](repeating: false, count: 10)
+                        self.photos = []
+                        fetchPhoto()
+                    }
+                    .disabled(search.isEmpty)
+                    
                 }
-                .padding(.leading,10)
+                .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)! * CGFloat(7/10))
+                .padding()
+                .background(Color.white)
                 
-                Button("Find") {
-                    self.photos = []
-                    fetchPhoto()
-                }
-                .disabled(search.isEmpty)
                 
-                Spacer()
-            }
-            .padding(.top,UIApplication.shared.windows.first?.safeAreaInsets.top)
-            .padding()
-            .background(Color.white)
-        
-            Spacer(minLength: 15)
+                Toggle("Liked", isOn: $showLikedOnly.didSet {_ in 
+                    likedByUser = showLikedOnly ? [Bool](repeating: true, count: likedPhotos.count) : [Bool](repeating: false, count: 10)
+                })
+                .padding()
+                .padding(.top, -15)
+                .padding(.bottom, -15)
+                
+
+                Spacer(minLength: 15)
+                
+                PhotoListView(photos: showLikedOnly ? $likedPhotos : $photos, search: $search, likedByUser: $likedByUser, likedPhotos: $likedPhotos, showLikedOnly: $showLikedOnly)
             
-//            var body: some View {
-//                    NavigationView {
-//                        List {
-//                            Toggle(isOn: $showLikedOnly) {
-//                                Text("Your own travel")
-//                            }
-//
-//                            ForEach(filteredPhotos) { photo in
-//                                NavigationLink{
-//                                    LandmarkRow(landmark: landmark)
-//                                }
-//                            }
-//                        }
-//                        .navigationTitle("Landmarks")
-//                    }
-//                }
-            
-            
-            PhotoListView(photos: photos)
-            // Photo List(normal)
-            
-//            ScrollView {
-//                
-//                LazyVGrid(columns: columns){
-//                    ForEach(photos, id:\.self) {photo in
-//                        
-//                        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .bottom))
-//                        {
-//                     
-//                        NavigationLink(  //detailed view when clicked
-//                            destination: DetailedPhotoView(imageCode: URL(string: photo.urls["raw"]!)!, location: self.search, photos: $photos, likedbyuser: $likedbyuser, curr: photos.firstIndex {$0 == photo}!)){
-//                        Image(systemName: "photos")
-//                            .data(url: URL(string: photo.urls["thumb"]!)!)
-//                            .resizable()
-//                            .frame(width: (UIScreen.main.bounds.width - 10) / 2, height: 200)
-//                            .cornerRadius(5) }
-//                            
-//                            //이상하게 navigatioin link 걸면 위치가 어긋나길래 주석처리해뒀어요
-//                            if (likedbyuser[photos.firstIndex {$0 == photo}!]) {
-//                                        Image(systemName: "heart.fill")
-//                                            .foregroundColor(.pink)
-//                                    }
-//                                    else {
-//                                        Image(systemName: "heart")
-//                                            .foregroundColor(.pink)
-//                                    }
-//                            
-//                       
-//                    }
-//                }
-//
-//            } //photolist(normal)
-            
-            
-            
-                Spacer()
-            }
-            .background(Color.black.opacity(0.07).edgesIgnoringSafeArea(.all))
-            .edgesIgnoringSafeArea(.top)
-            
-        }.navigationBarTitle("Where do you want to go?", displayMode: .inline)
+                
+                
+            }.navigationBarTitle("Where do you want to go?", displayMode: .inline)
         }
-    
+    }
     
     func fetchPhoto() {
         let key = "xMTW2-DMELMK-DOsDuQcoeeAV_TBlRenbpumI70Ive4"
@@ -166,6 +113,7 @@ struct ContentView: View {
             }
         }.resume()
     }
+    
 
 }
 
@@ -174,5 +122,6 @@ struct ContentView: View {
 //        ContentView()
 //    }
 //}
+
 
 
