@@ -14,6 +14,7 @@ struct PhotoListView: View {
     @Binding var likedPhotos: [Photo]
     @Binding var showLikedOnly: Bool
     
+    
     @State private var columns : [GridItem] = [
         GridItem(spacing:4),
         GridItem(spacing:4)

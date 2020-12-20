@@ -67,7 +67,7 @@ struct ContentView: View {
                 
                 
                 Toggle("Liked", isOn: $showLikedOnly.didSet {_ in 
-                    likedByUser = showLikedOnly ? [Bool](repeating: true, count: likedPhotos.count) : [Bool](repeating: false, count: 10)
+                    likedByUser = showLikedOnly ? [Bool](repeating: true, count: 20) : [Bool](repeating: false, count: 20)
                 })
                 .padding()
                 .padding(.top, -15)

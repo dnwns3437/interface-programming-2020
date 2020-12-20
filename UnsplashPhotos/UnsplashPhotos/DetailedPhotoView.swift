@@ -100,8 +100,6 @@ struct DetailedPhotoView: View {
         .navigationBarItems(leading:
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
-                    curr = 0
-                    
                 }) {
                     Text("Back")
                     
