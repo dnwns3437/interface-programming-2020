@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct DetailedPhotoView: View {
     @Binding var photos: [Photo]
@@ -86,11 +87,13 @@ struct DetailedPhotoView: View {
                 }.padding(.trailing, 10)
                 
                 Text("Download")
-                Button(action: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/{}/*@END_MENU_TOKEN@*/) {
-                    Image(systemName: "arrow.down")
+                Button(action: {
+                    SDWebImageDownloader().downloadImage(with: URL(string: photos[curr].urls["thumb"]!)!) { (image, _, _, _) in
+                    UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)}
+                }) {Image(systemName: "arrow.down")
                         .renderingMode(.original)
                 }.padding(.trailing, 18)
-                
+
             }
             
         Spacer()
