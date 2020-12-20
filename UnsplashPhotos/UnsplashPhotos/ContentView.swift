@@ -14,7 +14,7 @@ struct ContentView: View {
     @State var showLikedOnly = false
     @State var likedByUser = [Bool](repeating: false, count: 10)
     @State var likedPhotos: [Photo] = []
-    
+    @State var noresults = false
     private var columns : [GridItem] = [
         GridItem(spacing:4),
         GridItem(spacing:4)
@@ -53,6 +53,7 @@ struct ContentView: View {
                     .padding(.leading,10)
                     
                     Button("Find") {
+                        self.page = 1
                         likedByUser = [Bool](repeating: false, count: 10)
                         self.photos = []
                         fetchPhoto()
@@ -77,17 +78,53 @@ struct ContentView: View {
                 
                 PhotoListView(photos: showLikedOnly ? $likedPhotos : $photos, search: $search, likedByUser: $likedByUser, likedPhotos: $likedPhotos, showLikedOnly: $showLikedOnly)
             
+                //hstack
+                HStack{
+                    if(self.page>1)
+                    {
+                        Button(action:{
+                        self.page-=1
+                        self.photos = []
+                        fetchPhoto()
+                    }) {
+                        Text("Prev")
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                    }
+                    }
+
+                    Spacer()
+                    
+                    Text("Page \(self.page)")
+                    
+                    Spacer()
+                    
+                    Button(action:{
+                        self.page+=1
+                        self.photos = []
+                        fetchPhoto()
+                    }) {
+                        Text("Next")
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                    }
+                }.padding(.horizontal, 25)
+                //hstack
                 
                 
             }.navigationBarTitle("Where do you want to go?", displayMode: .inline)
         }
     }
     
+    
+    
     func fetchPhoto() {
+        self.noresults = false
+        
         let key = "xMTW2-DMELMK-DOsDuQcoeeAV_TBlRenbpumI70Ive4"
         let query = self.search
 
-        guard let url = URL(string: "https://api.unsplash.com/search/photos?page=\(self.page)&query=\(query)&client_id=\(key)") else {
+        guard let url = URL(string: "https://api.unsplash.com/search/photos?page=\(self.page)&per_page=30&query=\(query)&client_id=\(key)") else {
             return
         }
         
@@ -104,6 +141,14 @@ struct ContentView: View {
                 print("not")
                 return
             }
+            
+            if response.results.isEmpty {
+                self.noresults = true
+            } else
+            {
+                self.noresults = false
+            }
+            
             
             for i in 0..<response.results.count {
 
