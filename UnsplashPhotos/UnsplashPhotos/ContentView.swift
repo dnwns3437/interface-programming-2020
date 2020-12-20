@@ -12,7 +12,7 @@ struct ContentView: View {
     @State var page = 1
     @State var photos: [Photo] = []
     @State var showLikedOnly = false
-    @State var likedByUser = [Bool](repeating: false, count: 10)
+    @State var likedByUser = [Bool](repeating: false, count: 28)
     @State var likedPhotos: [Photo] = []
     @State var noresults = false
     private var columns : [GridItem] = [
@@ -54,7 +54,7 @@ struct ContentView: View {
                     
                     Button("Find") {
                         self.page = 1
-                        likedByUser = [Bool](repeating: false, count: 10)
+                        likedByUser = [Bool](repeating: false, count: 28)
                         self.photos = []
                         fetchPhoto()
                     }
@@ -67,7 +67,7 @@ struct ContentView: View {
                 
                 
                 Toggle("Liked", isOn: $showLikedOnly.didSet {_ in 
-                    likedByUser = showLikedOnly ? [Bool](repeating: true, count: 20) : [Bool](repeating: false, count: 20)
+                    likedByUser = showLikedOnly ? [Bool](repeating: true, count: 28) : [Bool](repeating: false, count: 28)
                 })
                 .padding()
                 .padding(.top, -15)

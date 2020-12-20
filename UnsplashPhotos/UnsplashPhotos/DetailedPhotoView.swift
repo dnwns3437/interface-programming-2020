@@ -111,18 +111,13 @@ struct DetailedPhotoView: View {
     }
     
     func setLiked() {
-        for i in 0..<photos.count {
-            if likedByUser[i], !likedPhotos.contains(photos[i]) {
-                likedPhotos.append(photos[i])
-                break
+        if likedByUser[curr] {
+            if !likedPhotos.contains(photos[curr]) {
+                likedPhotos.append(photos[curr]);
             }
-            else if !likedByUser[i], likedPhotos.contains(photos[i]) {
-                likedPhotos.remove(at: likedPhotos.firstIndex {$0 == photos[i]}!)
-                if showLikedOnly, i < photos.count - 1 {
-                    likedByUser.remove(at: likedPhotos.firstIndex {$0 == photos[i]}!)
-                }
-                break
-            }
+        }
+        else {
+            likedPhotos.remove(at: likedPhotos.firstIndex {$0 == photos[curr]}!)
         }
     }
 }
