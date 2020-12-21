@@ -17,6 +17,7 @@ struct DetailedPhotoView: View {
     @State var isUserSwiping: Bool = false
     @State var offset: CGFloat = 0
     @State var curr: Int = 0
+    @State var downloaded = false
     var location: String
 
     
@@ -90,10 +91,13 @@ struct DetailedPhotoView: View {
                 Button(action: {
                     SDWebImageDownloader().downloadImage(with: URL(string: photos[curr].urls["thumb"]!)!) { (image, _, _, _) in
                     UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)}
+                    self.downloaded = true
                 }) {Image(systemName: "arrow.down")
                         .renderingMode(.original)
                 }.padding(.trailing, 18)
-
+                .alert(isPresented: $downloaded) {
+                    Alert(title: Text("Download Complete"), message: Text("Saved to your photo library"), dismissButton: .default(Text("OK!")))
+                }
             }
             
         Spacer()
